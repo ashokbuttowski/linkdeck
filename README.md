@@ -1,6 +1,6 @@
 # LinkShare - Personal Link Collection App
 
-LinkShare is a full-stack web application that allows users to save and organize their favorite links with automatic metadata extraction.
+LinkDeck is a full-stack web application that allows users to save and organize their favorite links with automatic metadata extraction.
 
 ## Features
 
@@ -20,8 +20,8 @@ LinkShare is a full-stack web application that allows users to save and organize
 ## Quick Start (Current Cloud Environment)
 
 The app is currently running and accessible at:
-- Frontend: https://3ab3ee47-2d6b-4a12-bd71-9b461394abd1.preview.emergentagent.com
-- Backend API: https://3ab3ee47-2d6b-4a12-bd71-9b461394abd1.preview.emergentagent.com/api
+- Frontend: 10001
+- Backend API: /api
 
 ## Local Development with Docker Compose
 
