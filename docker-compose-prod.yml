@@ -1,0 +1,63 @@
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: linkshare-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - linkshare_mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=linkshare_db
+    networks:
+      - linkshare-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: linkshare-backend
+    ports:
+      - "10002:8001"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=linkshare_db
+      - JWT_SECRET=your-super-secure-jwt-secret-key-change-in-production
+    depends_on:
+      - mongodb
+    volumes:
+      - ./backend:/app
+    networks:
+      - linkshare-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: linkshare-frontend
+    ports:
+      - "10001:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://host.docker.internal:10002
+      - NODE_ENV=production  # Add this for production mode
+    depends_on:
+      - backend
+    networks:
+      - linkshare-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M  # Reduced from 256M
+
+volumes:
+  linkshare_mongodb_data:
+
+networks:
+  linkshare-network:
+    driver: bridge
