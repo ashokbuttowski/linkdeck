@@ -43,7 +43,8 @@ services:
     ports:
       - "10001:3000"
     environment:
-      - REACT_APP_BACKEND_URL=http://host.docker.internal:10002
+    # - REACT_APP_BACKEND_URL=http://host.docker.internal:10002
+      - REACT_APP_BACKEND_URL=https://linkdeck.ignitionisland.com
       - NODE_ENV=production  # Add this for production mode
     depends_on:
       - backend
@@ -53,7 +54,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M  # Reduced from 256M
+          memory: 512M  # increased from 256M
 
 volumes:
   linkshare_mongodb_data:
