@@ -1,0 +1,36 @@
+# frontend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 1 # You can adjust this for more frontend instances
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        # --- IMPORTANT ---
+        # Replace 'your-docker-registry/your-frontend-image:latest' with the actual path to your image
+        image: ashokbuttowski/linkdeck:frontendv1
+        ports:
+        - containerPort: 3000 # The port your frontend application listens on
+        env:
+        # Since we want internal communication for development:
+        # The frontend will now talk directly to the backend's internal Kubernetes Service.
+        - name: REACT_APP_BACKEND_URL
+          value: http://backend-service:8001 # Uses the internal backend-service name and port
+        - name: NODE_ENV
+          value: production
+        resources: # Resource limits, translated from your Docker Compose
+          limits:
+            memory: "512Mi" # Kubernetes uses Mi (mebibytes)
+            # You can also add CPU requests/limits if desired, e.g.:
+            # cpu: "500m" # 0.5 of a CPU core

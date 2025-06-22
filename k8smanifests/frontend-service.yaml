@@ -1,0 +1,17 @@
+# frontend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service # The internal name for your frontend service
+  labels:
+    app: frontend
+spec:
+  selector:
+    app: frontend # This links the Service to the Pods created by the frontend-deployment
+  ports:
+    - protocol: TCP
+      port: 80       # The port this Service will listen on (standard HTTP)
+      targetPort: 3000 # The port on the frontend container to forward traffic to
+  type: NodePort      # This type exposes the service on a static port on each node's IP.
+                      # Kubernetes will assign a port in the 30000-32767 range.
+                      # You'll find this port using 'kubectl get service frontend-service'.
