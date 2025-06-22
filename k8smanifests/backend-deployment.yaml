@@ -1,0 +1,50 @@
+# backend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 1 # You can scale this up later by changing this value
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        # --- IMPORTANT ---
+        # Replace 'your-docker-registry/your-backend-image:latest' with the actual path to your image
+        image: ashokbuttowski/linkdeck:backendv1
+        ports:
+        - containerPort: 8001 # The port your backend application listens on
+        env:
+        - name: MONGO_URL
+          # This points to the internal MongoDB Service we created earlier
+          value: mongodb://mongodb-service:27017
+        - name: DB_NAME
+          value: linkshare_db
+        - name: JWT_SECRET
+          # For development this is okay, but for production, use Kubernetes Secrets for sensitive data
+          value: "your-super-secure-jwt-secret-key-change-in-production"
+        # --- Health Checks (Probes) ---
+        livenessProbe:
+          httpGet:
+            path: /api/health # The endpoint Kubernetes will check
+            port: 8001        # The port on the container to check
+          initialDelaySeconds: 15 # Wait 15s before first check
+          periodSeconds: 20       # Check every 20s
+          timeoutSeconds: 5
+          failureThreshold: 3     # Restart container after 3 failures
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8001
+          initialDelaySeconds: 5  # Start checking readiness after 5s
+          periodSeconds: 10       # Check every 10s
+          timeoutSeconds: 5
+          failureThreshold: 3     # Stop sending traffic after 3 failures

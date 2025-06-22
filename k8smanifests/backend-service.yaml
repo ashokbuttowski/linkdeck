@@ -1,0 +1,15 @@
+# backend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service # The stable, internal name for your backend service
+  labels:
+    app: backend
+spec:
+  selector:
+    app: backend # This links the Service to the Pods created by the backend-deployment
+  ports:
+    - protocol: TCP
+      port: 8001       # The port this Service will listen on
+      targetPort: 8001 # The port on the backend container to forward traffic to
+  type: ClusterIP      # This service is for internal cluster communication only
