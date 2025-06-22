@@ -1,0 +1,33 @@
+# mongodb-deployment.yaml
+apiVersion: apps/v1 # Specifies the API version for Deployment objects
+kind: Deployment    # Defines this as a Deployment kind of resource
+metadata:
+  name: mongodb-deployment # A unique name for your Deployment
+  labels:
+    app: mongodb # Labels are key-value pairs used to organize and select resources
+spec:
+  replicas: 1 # We start with 1 replica for a single MongoDB instance.
+              # For production, consider StatefulSets for high availability of databases.
+  selector:
+    matchLabels:
+      app: mongodb # This links the Deployment to the Pods it manages
+  template: # This defines the Pods that this Deployment will create
+    metadata:
+      labels:
+        app: mongodb # Labels for the Pods, matching the selector above
+    spec:
+      containers:
+      - name: mongodb # Name of the container within the Pod
+        image: mongo:7.0 # The Docker image to use
+        ports:
+        - containerPort: 27017 # The port your MongoDB container listens on
+        env: # Environment variables for the container
+        - name: MONGO_INITDB_DATABASE
+          value: linkshare_db
+        volumeMounts: # How volumes are mounted inside the container
+        - name: mongodb-storage # Refers to the volume defined at the Pod level
+          mountPath: /data/db # The path inside the container where the volume will be mounted
+      volumes: # Defines the volumes available to this Pod
+      - name: mongodb-storage # Name of the volume
+        persistentVolumeClaim: # This connects to a PersistentVolumeClaim for durable storage
+          claimName: mongodb-pvc # We'll define this 'mongodb-pvc' in the next file!
