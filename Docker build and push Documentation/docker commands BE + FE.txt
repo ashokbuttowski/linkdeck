@@ -1,0 +1,20 @@
+FE:
+
+docker build -f Dockerfile.frontend -t linkdeck-frontend:frontendv1 .
+
+docker tag linkdeck-frontend:frontendv1 ashokbuttowski/linkdeck:frontendv1
+
+
+docker push ashokbuttowski/linkdeck:frontendv1
+
+
+
+BE:
+
+docker build -f Dockerfile.backend -t linkdeck-backend:backendv1 .
+
+docker tag linkdeck-backend:backendv1 ashokbuttowski/linkdeck:backendv1
+
+docker push ashokbuttowski/linkdeck:backendv1
+
+
