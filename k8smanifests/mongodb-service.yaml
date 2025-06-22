@@ -1,0 +1,17 @@
+# mongodb-service.yaml
+apiVersion: v1     # API version for Service objects
+kind: Service      # Defines this as a Service kind of resource
+metadata:
+  name: mongodb-service # A unique name for your Service.
+                        # This is what your backend will use to connect (e.g., mongodb://mongodb-service:27017).
+  labels:
+    app: mongodb # Labels for the Service, often matching the app it exposes
+spec:
+  selector:
+    app: mongodb # This is CRUCIAL! It tells the Service to target Pods with the label 'app: mongodb'.
+  ports:
+    - protocol: TCP
+      port: 27017       # The port on which this Service will be accessible inside the cluster
+      targetPort: 27017 # The port on the Pod (container) that the Service will forward traffic to
+  clusterIP: None # This creates a 'headless' service, useful for stateful applications like databases.
+                  # It means DNS will resolve directly to the Pod's IP(s) instead of a single Service IP.

@@ -1,0 +1,16 @@
+# mongodb-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim # We are defining a request for storage
+metadata:
+  name: mongodb-pvc         # The name of our PVC, referenced by the MongoDB Deployment
+  labels:
+    app: mongodb
+spec:
+  accessModes:
+    - ReadWriteOnce # This means the volume can be mounted as read-write by a single Node.
+  resources:
+    requests:
+      storage: 200Mi   # We are requesting 1 Gigabyte of storage. Adjust this size as needed!
+  # storageClassName: standard # (Optional) Uncomment and specify if your cluster has a
+                               # specific StorageClass you want to use (e.g., 'standard', 'gp2', 'azurefile').
+                               # If omitted, the default StorageClass will be used.
