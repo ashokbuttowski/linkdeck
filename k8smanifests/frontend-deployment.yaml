@@ -19,7 +19,7 @@ spec:
       - name: frontend
         # --- IMPORTANT ---
         # Replace 'your-docker-registry/your-frontend-image:latest' with the actual path to your image
-        image: ashokbuttowski/linkdeck:frontendv1
+        image: ashokbuttowski/linkdeck:frontendv2
         ports:
         - containerPort: 3000 # The port your frontend application listens on
         env:
